@@ -11,12 +11,17 @@ Route::middleware(['auth'])->group(function () {
     /** Административная панель | Посты блога */
     Route::name('admin.posts.')->prefix('/admin/posts')->group(function () {
         Route::get('/', [PostController::class, 'index'])->name('index');
+        Route::get('/indexRestore', [PostController::class, 'indexRestore'])->name('indexRestore');
         Route::get('/create', [PostController::class, 'create'])->name('create');
         Route::get('/edit/{post}', [PostController::class, 'edit'])->name('edit');
 
         Route::delete('/destroy/{post}', [PostController::class, 'destroy'])->name('destroy');
+        Route::delete('/destroyAll', [PostController::class, 'destroyAll'])->name('destroyAll');
         Route::post('/store', [PostController::class, 'store'])->name('store');
         Route::put('/update/{post}', [PostController::class, 'update'])->name('update');
+
+        Route::put('/restoreOne/{id}', [PostController::class, 'restoreOne'])->name('restoreOne');
+        Route::put('/restoreAll', [PostController::class, 'restoreAll'])->name('restoreAll');
     });
 
     Route::name('admin.categories.')->prefix('/admin/categories')->group(function () {

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Filters\PostFilter;
 use App\Http\Requests\PostRequest;
 use App\Models\Category;
 use App\Models\Post;
+use App\Models\User;
 use Dflydev\DotAccessData\Data;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -14,12 +16,25 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(PostFilter $filter)
     {
-        $posts = Post::all();
+        $posts = Post::filter($filter)->get();
+
+        $categories = Category::all();
+
+        $users = User::all();
+
         return view('admin.post.index', [
             'posts' => $posts,
+            'categories' => $categories,
+            'users' => $users
         ]);
+    }
+
+    public function indexRestore()
+    {
+        $posts = Post::onlyTrashed()->get();
+        return view('admin.post.restoreAll', ['posts' => $posts]);
     }
 
     /**
@@ -39,6 +54,20 @@ class PostController extends Controller
         $data = $request->all();
         $post = Post::query()->create($data);
         return redirect()->route('admin.posts.index')->with(['success' => true, 'message' => 'Статья с ID ' . $post->id . ' записана в БД']);
+    }
+
+    public function restoreOne(string $id)
+    {
+        Post::query()->withTrashed()->where('id', $id)->restore();
+
+        return redirect()->route('admin.posts.index');
+    }
+
+    public function restoreAll()
+    {
+        Post::query()->withTrashed()->restore();
+
+        return redirect()->route('admin.posts.index');
     }
 
     /**
@@ -64,12 +93,15 @@ class PostController extends Controller
         return redirect()->route('admin.posts.index')->with(['success' => true]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Post $post)
     {
         $post->delete();
+        return redirect()->back()->with(['success' => true]);
+    }
+
+    public function destroyAll()
+    {
+        Post::query()->delete();
         return redirect()->back()->with(['success' => true]);
     }
 }
