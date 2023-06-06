@@ -20,6 +20,7 @@ class PostRequest extends FormRequest
             'user_id' => ['exists:users,id', 'int'],
             'is_visible' => ['bool'],
             'published_at' => ['date'],
+            'image' => ['image', 'mimes:jpg,png,jpeg,gif,svg']
         ];
     }
 }

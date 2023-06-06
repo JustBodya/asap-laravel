@@ -17,7 +17,8 @@
             <div class="m-3 w-full sm:max-w-md mt-6 px-6 py-4 bg-gray-100 shadow-md overflow-hidden">
                 <h3>{{ $post->title }}</h3>
                 <p>{{ $post->content }}</p>
-                <p>{{$post->category()}}</p>
+                <p>{{$post->category->title}}</p>
+                <p>{{$post->user->name}}</p>
                 <span>Дата публикации: {{ $post->published_at }}</span>
 
                 <form action="{{route('admin.posts.restoreOne', $post->id)}}" method="post">

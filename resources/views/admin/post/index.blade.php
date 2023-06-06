@@ -37,14 +37,17 @@
             </button>
         </form>
     </div>
-    <div class="flex content-around">
+    <div class="flex content-around flex-wrap">
         @foreach($posts as $post)
             <div class="m-3 w-full sm:max-w-md mt-6 px-6 py-4 bg-gray-100 shadow-md overflow-hidden">
-                <h3>{{ $post->title }}</h3>
-                <p>{{ $post->content }}</p>
-                <p>{{$post->category()}}</p>
-                <p>Автор статьи: {{$post->user()}}</p>
+                <h3 class="font-bold">{{ $post->title }}</h3>
+                <p>Описание: {{ $post->content }}</p>
+                <p>Категория: {{$post->category->title}}</p>
+                <p>Автор статьи: {{$post->user->name}}</p>
                 <span>Дата публикации: {{ $post->published_at }}</span>
+                @if($post->image)
+                    <img src="{{asset('storage/uploads/' . $post->image)}}" alt="{{$post->image}}">
+                @endif
                 <br><a class="text-indigo-500 hover:text-indigo-700 hover:border-b bord er-indigo-700"
                        href="{{ route('admin.posts.edit', $post) }}"> Редактировать </a>
                 <br>
@@ -55,5 +58,8 @@
                 </form>
             </div>
         @endforeach
+
     </div>
+    <br><br>
+    {{$posts->links()}}
 @endsection

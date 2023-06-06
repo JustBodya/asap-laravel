@@ -18,7 +18,7 @@ class PostController extends Controller
      */
     public function index(PostFilter $filter)
     {
-        $posts = Post::filter($filter)->get();
+        $posts = Post::filter($filter)->paginate(5);
 
         $categories = Category::all();
 
@@ -43,7 +43,8 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('admin.post.create', ['category_title' => $categories]);
+        $users = User::all();
+        return view('admin.post.create', ['category_title' => $categories, 'user_name' => $users]);
     }
 
     /**
@@ -52,7 +53,16 @@ class PostController extends Controller
     public function store(PostRequest $request)
     {
         $data = $request->all();
+
+        if ($request->file('image')) {
+            $file = $request->file('image');
+            $filename = date("Ymd His") . $file->getClientOriginalName();
+            $file->storeAs('uploads', $filename, 'public');
+            $data['image'] = $filename;
+        }
+
         $post = Post::query()->create($data);
+
         return redirect()->route('admin.posts.index')->with(['success' => true, 'message' => 'Статья с ID ' . $post->id . ' записана в БД']);
     }
 
@@ -89,6 +99,14 @@ class PostController extends Controller
     public function update(PostRequest $request, Post $post)
     {
         $data = $request->all();
+
+        if ($request->file('image')) {
+            $file = $request->file('image');
+            $filename = date("Ymd His") . $file->getClientOriginalName();
+            $file->storeAs('uploads', $filename, 'public');
+            $data['image'] = $filename;
+        }
+
         $post->update($data);
         return redirect()->route('admin.posts.index')->with(['success' => true]);
     }
