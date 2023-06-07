@@ -58,7 +58,6 @@
                 </form>
             </div>
         @endforeach
-
     </div>
     <br><br>
     {{$posts->links()}}
