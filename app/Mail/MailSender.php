@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -17,8 +18,9 @@ class MailSender extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct(public User $user)
     {
+
         //
     }
 
@@ -28,7 +30,6 @@ class MailSender extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address('jeffrey@example.com', 'Jeffrey Way'),
             subject: 'Mail Sender',
         );
     }
@@ -40,6 +41,9 @@ class MailSender extends Mailable
     {
         return new Content(
             view: 'admin.emails.test',
+            with: [
+                'user' => $this->user
+            ]
         );
     }
 

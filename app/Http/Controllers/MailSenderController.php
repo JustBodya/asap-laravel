@@ -19,9 +19,8 @@ class MailSenderController extends Controller
     public function store(): RedirectResponse
     {
         $users = User::query()->where('role_id', 2)->get();
-
         foreach ($users as $user) {
-            Mail::to($user->email)->queue(new MailSender());;
+            Mail::to('bv@tdsgn.ru')->queue(new MailSender($user));
         }
         return redirect()->back();
     }

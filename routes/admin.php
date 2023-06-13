@@ -37,9 +37,6 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
 
     Route::name('admin.emails.')->prefix('/admin/emails')->group(function () {
         Route::get('/', [MailSenderController::class, 'index'])->name('index');
-        Route::get('/', [MailSenderController::class, 'store'])->name('store');
+        Route::get('/store', [MailSenderController::class, 'store'])->name('store');
     });
 });
-
-
-
