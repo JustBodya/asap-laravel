@@ -18,7 +18,7 @@ class PostController extends Controller
      */
     public function index(PostFilter $filter)
     {
-        $posts = Post::filter($filter)->paginate(5);
+        $posts = Post::filter($filter)->paginate(6);
 
         $categories = Category::all();
 

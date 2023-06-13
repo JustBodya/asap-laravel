@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\MailSenderController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,6 +33,11 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
         Route::delete('/destroy/{category}', [CategoryController::class, 'destroy'])->name('destroy');
         Route::post('/store', [CategoryController::class, 'store'])->name('store');
         Route::put('/update/{category}', [CategoryController::class, 'update'])->name('update');
+    });
+
+    Route::name('admin.emails.')->prefix('/admin/emails')->group(function () {
+        Route::get('/', [MailSenderController::class, 'index'])->name('index');
+        Route::get('/', [MailSenderController::class, 'store'])->name('store');
     });
 });
 
