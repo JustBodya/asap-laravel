@@ -4,6 +4,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MailSenderController;
 use App\Http\Controllers\PostController;
+use App\Jobs\MailSenderJob;
+use App\Mail\UserSendMail;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'is_admin'])->group(function () {
@@ -37,6 +39,6 @@ Route::middleware(['auth', 'is_admin'])->group(function () {
 
     Route::name('admin.emails.')->prefix('/admin/emails')->group(function () {
         Route::get('/', [MailSenderController::class, 'index'])->name('index');
-        Route::get('/store', [MailSenderController::class, 'store'])->name('store');
+        Route::post('/send', [MailSenderController::class, 'send'])->name('send');
     });
 });

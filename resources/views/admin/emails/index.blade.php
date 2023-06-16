@@ -1,8 +1,15 @@
 @extends('admin.layouts.layout')
 @section('content')
-    <div class="w-full flex items-center justify-between text-green-500 font-bold content-around">
+    <div class="w-4/6 flex flex-col font-bold content-around">
         <h2 class="text-3xl text-gray-500">Пользователи</h2>
-        <form action="{{route('admin.emails.store')}}" method="get" class="flex justify-between items-baseline">
+        <form action="{{route('admin.emails.send')}}" method="post" class="justify-between items-baseline">
+            @csrf
+            <div class="flex items-center mb-4">
+                <label for="message" class="">Сообщение: </label>
+                <input
+                    class="font-normal w-2/5 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm block ml-4"
+                    id="message" type="text" name="message" autofocus="autofocus">
+            </div>
             <button
                 type="submit"
                 class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded-md">

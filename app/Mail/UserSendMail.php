@@ -11,17 +11,16 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class MailSender extends Mailable
+class UserSendMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(public User $user)
+    public function __construct(public User $user, public string $message)
     {
 
-        //
     }
 
     /**
@@ -30,7 +29,7 @@ class MailSender extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Mail Sender',
+            subject: 'Mail sender',
         );
     }
 
@@ -40,9 +39,10 @@ class MailSender extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'admin.emails.test',
+            view: 'mail.userMail',
             with: [
-                'user' => $this->user
+                'user' => $this->user,
+                'messages' => $this->message
             ]
         );
     }

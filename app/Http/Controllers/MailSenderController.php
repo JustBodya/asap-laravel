@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\MailSender;
+use App\Jobs\MailSenderJob;
+use App\Mail\UserSendMail;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -16,12 +17,14 @@ class MailSenderController extends Controller
         return view('admin.emails.index', ['users' => $users]);
     }
 
-    public function store(): RedirectResponse
+    public function send(Request $request): RedirectResponse
     {
+        $message = $request['message'];
         $users = User::query()->where('role_id', 2)->get();
+
         foreach ($users as $user) {
-            Mail::to('bv@tdsgn.ru')->queue(new MailSender($user));
+            MailSenderJob::dispatch($user, $message);
         }
-        return redirect()->back();
+        return redirect()->route('admin.emails.index');
     }
 }
